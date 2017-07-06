@@ -47,6 +47,7 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.9.0",
-    "hyperapp": "^0.9.3"
+    "hyperapp": "^0.9.3",
+    "hyperapp-router": "^0.2.2"
   }
 }
