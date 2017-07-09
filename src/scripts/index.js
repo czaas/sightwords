@@ -24,7 +24,7 @@ app({
   state: {
     allUsers: [],
     currentUser: {},
-    currentListType: 'default', // default/practice
+    currentListType: 'default', // default || practice
     currentWord: {},
     showCongratsScreen: false,
   },
@@ -99,6 +99,32 @@ app({
       };
 
       actions.setNextWord(setWordData);
+    },
+    goBackOneWord: (state, actions, data) => {
+      console.log(data);
+      let previousWord = undefined;
+
+      if (data.sequence > 1) {
+        if (state.currentListType === 'practice') {
+          let tempList = [];
+          let previousWords = state.currentUser.list.forEach((words) => {
+            if (words.practice && words.sequence < data.sequence) {
+              tempList.push(words);
+            }
+          });
+
+          previousWord = tempList.sort((a, b) => a.sequence - b.sequence)[tempList.length - 1];
+
+        } else {
+          previousWord = state.currentUser.list.filter((word) => word.sequence === data.sequence - 1)[0];
+        }
+      }
+
+      if (previousWord) {
+        state.currentWord = previousWord;
+      }
+
+      return state;
     },
     setNextWord: (state, actions, data) => {
       let foundWord = false;
