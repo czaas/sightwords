@@ -9,3 +9,37 @@ body {
   }
 }
 
+.hide {
+  display: none;
+}
+
+.disabled {
+  opacity: .5;
+  pointer-events: none;
+}
+
+.play-game {
+  .list-complete,
+  .congrats-screen {
+    display: none;
+  }
+
+  &.show-list-complete {
+    .current-word {
+      display: none;
+    }
+
+    .list-complete {
+      display: block;
+    }
+  }
+  &.show-congrats-screen {
+    .congrats-screen {
+      display: block;
+    }
+
+    .current-word {
+      display: none;
+    }
+  }
+}
