@@ -6,135 +6,16 @@ if (module.hot) {
 
 import '../styles/index.scss';
 
-import { 
-  app,
-  h,
-} from 'hyperapp';
+import {  app } from 'hyperapp';
 import { Router } from 'hyperapp-router';
-import shortid from 'shortid';
 
+import shortid from 'shortid';
 import 'whatwg-fetch';
 
-const ViewContainer = ({state, actions, className}, data) => {
-  return (
-    <main class={className}>
-      {data}
-    </main>
-  );
-};
+import { Home } from './views/Home.js';
+import { ChooseListType } from './views/ChooseListType.js';
+import { ViewList } from './views/ViewList.js';
 
-const Home = (state, actions, data, emit) => {
-
-  let showSelectUser = state.allUsers.length >= 1 ? '' : 'hide';
-
-  function createNewUser(e) {
-    if (e) { e.preventDefault(); }
-
-    let newNameElement = document.getElementById('new-user-name');
-
-    let newName = newNameElement.value;
-    actions.createNewUser(newName);
-
-    newNameElement.value = '';
-  }
-
-  return (
-    <ViewContainer state={state} actions={actions} className='home'>
-      <div class={showSelectUser}>
-        <h2>Select user</h2>
-        <ul>
-          {state.allUsers.map((user) => (
-            <li><a onclick={() => {
-              actions.updateCurrentUser(user);
-              actions.router.go('/choose-list-type');
-            }}>{user.name}</a></li>
-          ))}
-        </ul>
-
-        <p>or</p>
-      </div>
-      <div>
-        <h2>Create new user</h2>
-
-        <form>
-          <label for="new-user-name" onsubmit={createNewUser}>
-            <input id="new-user-name" name="new-user-name" />
-            <button onclick={createNewUser}>Create User</button>
-          </label>
-        </form>
-      </div>
-    </ViewContainer>
-  );
-};
-
-const ChooseListType = (state, actions, data, emit) => {
-  function hasPracticeWords() {
-    let hasPracticeWords = false;
-
-    if (state.currentUser.list) {
-      for (let i = 0; i < state.currentUser.list.length; i++) {
-        if (state.currentUser.list[i].practice === true) {
-          hasPracticeWords = true;
-        }
-
-        if (hasPracticeWords === true) {
-          i = state.currentUser.list.length;
-        }
-      }
-    }
-
-    return hasPracticeWords;
-  }
-
-  let disableIfNoPracticeWords = (hasPracticeWords()) ? '' : 'disabled';
-
-  return (
-    <ViewContainer state={state} actions={actions}>
-      <h2>Choose List Type</h2>
-
-      <p><a onclick={() => actions.updateGameType('default')}>All words List</a></p>
-      <p>or</p>
-      <p><a className={disableIfNoPracticeWords} onclick={() => actions.updateGameType('practice')}>Your practice List</a></p>
-    </ViewContainer>
-  );
-};
-
-const PlayGame = (state, actions, data, emit) => {
-  let currentWord = state.currentWord;
-  let noMoreWordsOnList = (!currentWord.word) ? 'show-list-complete' : '';
-  let hideOnPracticeList = (state.currentListType === 'practice') ? 'hide' : '';
-  let showOnPracticeList = (state.currentListType === 'practice') ? '' : 'hide';
-
-  return (
-    <ViewContainer state={state} actions={actions} className={`play-game ${ noMoreWordsOnList }`}>
-      <div className="current-word" currentWordSequnce={(state.currentWord.word) ? state.currentWord.sequence : ''}>
-        <h2>{ currentWord.word }</h2>
-
-        <p className={hideOnPracticeList}><a onclick={ () => { 
-          actions.markComplete(currentWord); 
-          actions.setNextWord(); 
-        }}>I said it out loud! Move on!</a></p>
-
-        <p><a onclick={ () => {
-          if (currentWord.practice) { 
-            actions.removeFromPracticeAndMarkComplete(currentWord);
-            actions.setNextWord(); 
-          } else {
-            actions.addToPractice(currentWord);
-            actions.setNextWord(); 
-          }
-        }}>{ (currentWord.practice) ? 'Remove from' : 'Add to' } practice list and continue.</a></p>
-
-      {<p className={showOnPracticeList}><a onclick={() => actions.leaveOnPracticeAndContinue(currentWord)}>Leave on practice list and continue</a></p>}
-      </div>
-      <div className="list-complete">
-        <p>You've completed your { (state.currentListType === 'practice') ? 'practice' : 'normal' } list!</p>
-
-        <p><a onclick={() => actions.router.go('/choose-list-type')}>Choose a different list</a> or <a onclick={() => actions.router.go('/')}>Go Home</a></p>
-      </div>
-    </ViewContainer>
-  );
-};
 
 app({
   mixins: [Router],
@@ -337,6 +218,6 @@ app({
   view: [
     ['/', Home],
     ['/choose-list-type', ChooseListType],
-    ['/list', PlayGame],
+    ['/list', ViewList],
   ],
 });
