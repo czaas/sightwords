@@ -100,73 +100,38 @@ const ChooseListType = (state, actions, data, emit) => {
 };
 
 const PlayGame = (state, actions, data, emit) => {
-  /*
-  - Need to determine which word to display depending on state.currentListType 
-  - Update current word based on user action, (complete or add to practice)... then move onto next word. 
-  - "Add to" or "Remove from" depending on if word is on practice list already. 
-  - Here is where we check for if user current complete word (wordCompletionCount % 100 === 0) then show congratulations screen.
-  */
-  function getNextWord() {
-    let foundWord = false;
-    let word = '';
-
-    if (state.currentUser.list) {
-      for (let i = 0; i < state.currentUser.list.length; i++) {
-        let currentWord = state.currentUser.list[i];
-
-        if (state.currentListType === 'default') {
-          if (!currentWord.complete && !currentWord.practice) {
-            foundWord = true;
-            word = currentWord;
-          }
-        } else if (state.currentListType === 'practice') {
-          if (currentWord.practice) {
-            foundWord = true;
-            word = currentWord;
-          }
-        }
-
-        if (foundWord) {
-          i = state.currentUser.list.length;
-        }
-      }
-    }
-
-    return word;
-  }
-
-  let currentWord = getNextWord();
-  let noMoreWordsOnList = (currentWord === '') ? 'show-list-complete' : '';
+  let currentWord = state.currentWord;
+  let noMoreWordsOnList = (!currentWord.word) ? 'show-list-complete' : '';
   let hideOnPracticeList = (state.currentListType === 'practice') ? 'hide' : '';
+  let showOnPracticeList = (state.currentListType === 'practice') ? '' : 'hide';
 
   return (
     <ViewContainer state={state} actions={actions} className={`play-game ${ noMoreWordsOnList }`}>
-      <div className="current-word">
+      <div className="current-word" currentWordSequnce={(state.currentWord.word) ? state.currentWord.sequence : ''}>
         <h2>{ currentWord.word }</h2>
 
-        <p className={hideOnPracticeList}><a onclick={ () => actions.markComplete(currentWord) }>I said it out loud! Move on!</a></p>
+        <p className={hideOnPracticeList}><a onclick={ () => { 
+          actions.markComplete(currentWord); 
+          actions.setNextWord(); 
+        }}>I said it out loud! Move on!</a></p>
+
         <p><a onclick={ () => {
           if (currentWord.practice) { 
             actions.removeFromPracticeAndMarkComplete(currentWord);
+            actions.setNextWord(); 
           } else {
             actions.addToPractice(currentWord);
+            actions.setNextWord(); 
           }
         }}>{ (currentWord.practice) ? 'Remove from' : 'Add to' } practice list and continue.</a></p>
+
+      {<p className={showOnPracticeList}><a onclick={() => actions.leaveOnPracticeAndContinue(currentWord)}>Leave on practice list and continue</a></p>}
       </div>
       <div className="list-complete">
         <p>You've completed your { (state.currentListType === 'practice') ? 'practice' : 'normal' } list!</p>
 
         <p><a onclick={() => actions.router.go('/choose-list-type')}>Choose a different list</a> or <a onclick={() => actions.router.go('/')}>Go Home</a></p>
       </div>
-    </ViewContainer>
-  );
-};
-
-const CompletedListScreen = (state, actions, data, emit) => {
-  let message = (state.currentListType === 'default') ? 'all the words' : 'your practice list';
-  return (
-    <ViewContainer state={state} actions={actions} className="completed-list">
-      <h2>Congratulations, you've completed {message}!</h2>
     </ViewContainer>
   );
 };
@@ -204,7 +169,8 @@ app({
     updateGameType: (state, actions, data, emit) => {
       state.currentListType = data;
 
-      actions.router.go('/play-game');
+      actions.setNextWord();
+      actions.router.go('/list');
       return state;
     },
 
@@ -246,8 +212,45 @@ app({
       emit('saveCurrentUser');
       return state;
     },
-    toggleShowCongratsScreen: (state, actions, data) => {
-      state.showCongratsScreen = data;
+    leaveOnPracticeAndContinue: (state, actions, data) => {
+      let setWordData = {
+        sequenceToSkip: data.sequence,
+      };
+
+      actions.setNextWord(setWordData);
+    },
+    setNextWord: (state, actions, data) => {
+      let foundWord = false;
+      let word = {};
+
+      if (state.currentUser.list) {
+        for (let i = 0; i < state.currentUser.list.length; i++) {
+          let currentWord = state.currentUser.list[i];
+
+          if (state.currentListType === 'default') {
+            if (!currentWord.complete && !currentWord.practice) {
+              foundWord = true;
+              word = currentWord;
+            }
+          } else if (state.currentListType === 'practice') {
+            if (data && data.sequenceToSkip) {
+              if (currentWord.practice && currentWord.sequence > data.sequenceToSkip) {
+                foundWord = true;
+                word = currentWord;
+              }
+            } else if (currentWord.practice) {
+              foundWord = true;
+              word = currentWord;
+            }
+          }
+
+          if (foundWord) {
+            i = state.currentUser.list.length;
+          }
+        }
+      }
+
+      state.currentWord = word;
 
       return state;
     },
@@ -334,7 +337,6 @@ app({
   view: [
     ['/', Home],
     ['/choose-list-type', ChooseListType],
-    ['/play-game', PlayGame],
-    ['/completed-list', CompletedListScreen],
+    ['/list', PlayGame],
   ],
 });
