@@ -187,7 +187,7 @@ app({
     // User actions
     updateCurrentUser: (state, actions, data, emit) => {
       state.currentUser = data;
-      // actions.router.go('/choose-list-type');
+
       return state;
     },
     updateAllUsers: (state, actions, data, emit) => {
@@ -197,7 +197,7 @@ app({
     },
     createNewUser: (state, actions, data, emit) => {
       emit('saveNewUser', data);
-      return state;
+      actions.router.go('/choose-list-type');
     },
     
     // List Type actions
@@ -292,7 +292,6 @@ app({
         id: shortid.generate(),
         list: JSON.parse(listRef),
         name: data,
-        haveSeenCongratsFor: [],
       };
 
       /*
