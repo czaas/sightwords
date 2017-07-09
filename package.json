@@ -48,6 +48,8 @@
   "dependencies": {
     "babel-polyfill": "^6.9.0",
     "hyperapp": "^0.9.3",
-    "hyperapp-router": "^0.2.2"
+    "hyperapp-router": "^0.2.2",
+    "shortid": "^2.2.8",
+    "whatwg-fetch": "^2.0.3"
   }
 }
