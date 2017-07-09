@@ -81,16 +81,30 @@ app({
       return state;
     },
     removeFromPracticeAndMarkComplete: (state, actions, data, emit) => {
+      let mightBeNextWord = [];
+      let nextWord = {};
+
       state.currentUser.list = state.currentUser.list.map((word) => {
         if (word.id === data.id) {
           word.practice = false;
           word.complete = true;
         }
 
+        if (word.practice) {
+          mightBeNextWord.push(word);
+        }
+
         return word;
       });
 
+      for (let i = 0; i < mightBeNextWord.length; i++) {
+        if (mightBeNextWord[i].sequence >= state.currentWord.sequence) {
+          nextWord = mightBeNextWord[i];
+        }
+      }
+
       emit('saveCurrentUser');
+      state.currentWord = nextWord;
       return state;
     },
     leaveOnPracticeAndContinue: (state, actions, data) => {
@@ -101,7 +115,6 @@ app({
       actions.setNextWord(setWordData);
     },
     goBackOneWord: (state, actions, data) => {
-      console.log(data);
       let previousWord = undefined;
 
       if (data.sequence > 1) {

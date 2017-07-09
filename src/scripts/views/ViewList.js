@@ -29,7 +29,6 @@ export const ViewList = (state, actions, data, emit) => {
         <p><a onclick={ () => {
           if (currentWord.practice) { 
             actions.removeFromPracticeAndMarkComplete(currentWord);
-            actions.setNextWord(); 
           } else {
             actions.addToPractice(currentWord);
             actions.setNextWord(); 
