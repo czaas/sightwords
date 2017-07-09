@@ -6,170 +6,16 @@ if (module.hot) {
 
 import '../styles/index.scss';
 
-import { 
-  app,
-  h,
-} from 'hyperapp';
+import {  app } from 'hyperapp';
 import { Router } from 'hyperapp-router';
-import shortid from 'shortid';
 
+import shortid from 'shortid';
 import 'whatwg-fetch';
 
-const ViewContainer = ({state, actions, className}, data) => {
-  return (
-    <main class={className}>
-      {data}
-    </main>
-  );
-};
+import { Home } from './views/Home.js';
+import { ChooseListType } from './views/ChooseListType.js';
+import { ViewList } from './views/ViewList.js';
 
-const Home = (state, actions, data, emit) => {
-
-  let showSelectUser = state.allUsers.length >= 1 ? '' : 'hide';
-
-  function createNewUser(e) {
-    if (e) { e.preventDefault(); }
-
-    let newNameElement = document.getElementById('new-user-name');
-
-    let newName = newNameElement.value;
-    actions.createNewUser(newName);
-
-    newNameElement.value = '';
-  }
-
-  return (
-    <ViewContainer state={state} actions={actions} className='home'>
-      <div class={showSelectUser}>
-        <h2>Select user</h2>
-        <ul>
-          {state.allUsers.map((user) => (
-            <li><a onclick={() => {
-              actions.updateCurrentUser(user);
-              actions.router.go('/choose-list-type');
-            }}>{user.name}</a></li>
-          ))}
-        </ul>
-
-        <p>or</p>
-      </div>
-      <div>
-        <h2>Create new user</h2>
-
-        <form>
-          <label for="new-user-name" onsubmit={createNewUser}>
-            <input id="new-user-name" name="new-user-name" />
-            <button onclick={createNewUser}>Create User</button>
-          </label>
-        </form>
-      </div>
-    </ViewContainer>
-  );
-};
-
-const ChooseListType = (state, actions, data, emit) => {
-  function hasPracticeWords() {
-    let hasPracticeWords = false;
-
-    if (state.currentUser.list) {
-      for (let i = 0; i < state.currentUser.list.length; i++) {
-        if (state.currentUser.list[i].practice === true) {
-          hasPracticeWords = true;
-        }
-
-        if (hasPracticeWords === true) {
-          i = state.currentUser.list.length;
-        }
-      }
-    }
-
-    return hasPracticeWords;
-  }
-
-  let disableIfNoPracticeWords = (hasPracticeWords()) ? '' : 'disabled';
-
-  return (
-    <ViewContainer state={state} actions={actions}>
-      <h2>Choose List Type</h2>
-
-      <p><a onclick={() => actions.updateGameType('default')}>All words List</a></p>
-      <p>or</p>
-      <p><a className={disableIfNoPracticeWords} onclick={() => actions.updateGameType('practice')}>Your practice List</a></p>
-    </ViewContainer>
-  );
-};
-
-const PlayGame = (state, actions, data, emit) => {
-  /*
-  - Need to determine which word to display depending on state.currentListType 
-  - Update current word based on user action, (complete or add to practice)... then move onto next word. 
-  - "Add to" or "Remove from" depending on if word is on practice list already. 
-  - Here is where we check for if user current complete word (wordCompletionCount % 100 === 0) then show congratulations screen.
-  */
-  function getNextWord() {
-    let foundWord = false;
-    let word = '';
-
-    if (state.currentUser.list) {
-      for (let i = 0; i < state.currentUser.list.length; i++) {
-        let currentWord = state.currentUser.list[i];
-
-        if (state.currentListType === 'default') {
-          if (!currentWord.complete && !currentWord.practice) {
-            foundWord = true;
-            word = currentWord;
-          }
-        } else if (state.currentListType === 'practice') {
-          if (currentWord.practice) {
-            foundWord = true;
-            word = currentWord;
-          }
-        }
-
-        if (foundWord) {
-          i = state.currentUser.list.length;
-        }
-      }
-    }
-
-    return word;
-  }
-
-  let currentWord = getNextWord();
-  let noMoreWordsOnList = (currentWord === '') ? 'show-list-complete' : '';
-  let hideOnPracticeList = (state.currentListType === 'practice') ? 'hide' : '';
-
-  return (
-    <ViewContainer state={state} actions={actions} className={`play-game ${ noMoreWordsOnList }`}>
-      <div className="current-word">
-        <h2>{ currentWord.word }</h2>
-
-        <p className={hideOnPracticeList}><a onclick={ () => actions.markComplete(currentWord) }>I said it out loud! Move on!</a></p>
-        <p><a onclick={ () => {
-          if (currentWord.practice) { 
-            actions.removeFromPracticeAndMarkComplete(currentWord);
-          } else {
-            actions.addToPractice(currentWord);
-          }
-        }}>{ (currentWord.practice) ? 'Remove from' : 'Add to' } practice list and continue.</a></p>
-      </div>
-      <div className="list-complete">
-        <p>You've completed your { (state.currentListType === 'practice') ? 'practice' : 'normal' } list!</p>
-
-        <p><a onclick={() => actions.router.go('/choose-list-type')}>Choose a different list</a> or <a onclick={() => actions.router.go('/')}>Go Home</a></p>
-      </div>
-    </ViewContainer>
-  );
-};
-
-const CompletedListScreen = (state, actions, data, emit) => {
-  let message = (state.currentListType === 'default') ? 'all the words' : 'your practice list';
-  return (
-    <ViewContainer state={state} actions={actions} className="completed-list">
-      <h2>Congratulations, you've completed {message}!</h2>
-    </ViewContainer>
-  );
-};
 
 app({
   mixins: [Router],
@@ -178,7 +24,7 @@ app({
   state: {
     allUsers: [],
     currentUser: {},
-    currentListType: 'default', // default/practice
+    currentListType: 'default', // default || practice
     currentWord: {},
     showCongratsScreen: false,
   },
@@ -187,7 +33,7 @@ app({
     // User actions
     updateCurrentUser: (state, actions, data, emit) => {
       state.currentUser = data;
-      // actions.router.go('/choose-list-type');
+
       return state;
     },
     updateAllUsers: (state, actions, data, emit) => {
@@ -197,14 +43,15 @@ app({
     },
     createNewUser: (state, actions, data, emit) => {
       emit('saveNewUser', data);
-      return state;
+      actions.router.go('/choose-list-type');
     },
     
     // List Type actions
     updateGameType: (state, actions, data, emit) => {
       state.currentListType = data;
 
-      actions.router.go('/play-game');
+      actions.setNextWord();
+      actions.router.go('/list');
       return state;
     },
 
@@ -234,20 +81,96 @@ app({
       return state;
     },
     removeFromPracticeAndMarkComplete: (state, actions, data, emit) => {
+      let mightBeNextWord = [];
+      let nextWord = {};
+
       state.currentUser.list = state.currentUser.list.map((word) => {
         if (word.id === data.id) {
           word.practice = false;
           word.complete = true;
         }
 
+        if (word.practice) {
+          mightBeNextWord.push(word);
+        }
+
         return word;
       });
 
+      for (let i = 0; i < mightBeNextWord.length; i++) {
+        if (mightBeNextWord[i].sequence >= state.currentWord.sequence) {
+          nextWord = mightBeNextWord[i];
+        }
+      }
+
       emit('saveCurrentUser');
+      state.currentWord = nextWord;
       return state;
     },
-    toggleShowCongratsScreen: (state, actions, data) => {
-      state.showCongratsScreen = data;
+    leaveOnPracticeAndContinue: (state, actions, data) => {
+      let setWordData = {
+        sequenceToSkip: data.sequence,
+      };
+
+      actions.setNextWord(setWordData);
+    },
+    goBackOneWord: (state, actions, data) => {
+      let previousWord = undefined;
+
+      if (data.sequence > 1) {
+        if (state.currentListType === 'practice') {
+          let tempList = [];
+          let previousWords = state.currentUser.list.forEach((words) => {
+            if (words.practice && words.sequence < data.sequence) {
+              tempList.push(words);
+            }
+          });
+
+          previousWord = tempList.sort((a, b) => a.sequence - b.sequence)[tempList.length - 1];
+
+        } else {
+          previousWord = state.currentUser.list.filter((word) => word.sequence === data.sequence - 1)[0];
+        }
+      }
+
+      if (previousWord) {
+        state.currentWord = previousWord;
+      }
+
+      return state;
+    },
+    setNextWord: (state, actions, data) => {
+      let foundWord = false;
+      let word = {};
+
+      if (state.currentUser.list) {
+        for (let i = 0; i < state.currentUser.list.length; i++) {
+          let currentWord = state.currentUser.list[i];
+
+          if (state.currentListType === 'default') {
+            if (!currentWord.complete && !currentWord.practice) {
+              foundWord = true;
+              word = currentWord;
+            }
+          } else if (state.currentListType === 'practice') {
+            if (data && data.sequenceToSkip) {
+              if (currentWord.practice && currentWord.sequence > data.sequenceToSkip) {
+                foundWord = true;
+                word = currentWord;
+              }
+            } else if (currentWord.practice) {
+              foundWord = true;
+              word = currentWord;
+            }
+          }
+
+          if (foundWord) {
+            i = state.currentUser.list.length;
+          }
+        }
+      }
+
+      state.currentWord = word;
 
       return state;
     },
@@ -292,7 +215,6 @@ app({
         id: shortid.generate(),
         list: JSON.parse(listRef),
         name: data,
-        haveSeenCongratsFor: [],
       };
 
       /*
@@ -335,7 +257,6 @@ app({
   view: [
     ['/', Home],
     ['/choose-list-type', ChooseListType],
-    ['/play-game', PlayGame],
-    ['/completed-list', CompletedListScreen],
+    ['/list', ViewList],
   ],
 });
