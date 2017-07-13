@@ -190,17 +190,8 @@ app({
     },
 
     /**
-    ## resetStateList
-    
-    updates state `currentUser.list`
-    */ 
-    resetStateList: (state, actions, dataList) => {
-      state.currentUser.list = dataList;
-      return state;
-    },
-
-    /**
     ## resetList
+    ## resetStateList
 
     - Looks on the element that was clicked for a `listType` value.
     - loops through currentUserList
@@ -234,15 +225,15 @@ app({
       actions.resetStateList(newList);
       emit('saveCurrentUser');
     },
+    resetStateList: (state, actions, dataList) => {
+      state.currentUser.list = dataList;
+      return state;
+    },
 
     /**
     ## saveName
     ## stateSaveName
-
-    Fired on form submission
-
-    data.name = "new users name"
-
+    data.name = "new user name"
     - saveName is fired by save state.
      - fires stateSaveName
      - emits [saveCurrentUser](actions.saveCurrentUser)
