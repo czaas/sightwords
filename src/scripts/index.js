@@ -86,31 +86,30 @@ app({
       return state;
     },
     removeFromPracticeAndMarkComplete: (state, actions, data, emit) => {
-      let mightBeNextWord = [];
-      let nextWord = {};
+      var mightBeNextWord = [];
+      var nextWord = {};
+      var foundWord = false;
 
-      state.currentUser.list = state.currentUser.list.map((word) => {
-        if (word.id === data.id) {
-          word.practice = false;
-          word.complete = true;
+      // Finding and updateing 
+      for (var i = 0; i < state.currentUser.list.length; i++)  {
+        var currentWord = state.currentUser.list[i];
+
+        if (currentWord.id === data.id) {
+          currentWord.practice = false;
+          currentWord.complete = true;
+
+          foundWord = true;
         }
 
-        if (word.practice) {
-          mightBeNextWord.push(word);
-        }
+        state.currentUser.list[i] = currentWord;
 
-        return word;
-      });
-
-      for (let i = 0; i < mightBeNextWord.length; i++) {
-        if (mightBeNextWord[i].sequence >= state.currentWord.sequence) {
-          nextWord = mightBeNextWord[i];
+        if (foundWord) {
+          i = state.currentUser.list.length;
         }
       }
 
-      emit('saveCurrentUser');
-      state.currentWord = nextWord;
-      return state;
+      actions.setNextWord();
+      actions.updateUser({ currentUser: state.currentUser });
     },
     leaveOnPracticeAndContinue: (state, actions, data) => {
       let setWordData = {
@@ -151,7 +150,6 @@ app({
       if (state.currentUser.list) {
         for (let i = 0; i < state.currentUser.list.length; i++) {
           let currentWord = state.currentUser.list[i];
-
           if (state.currentListType === 'default') {
             if (!currentWord.complete && !currentWord.practice) {
               foundWord = true;
@@ -182,7 +180,7 @@ app({
 
 
     /** # manage account */
-    updateUser: (state, actions, data) => {
+    updateUser: (state, actions, data, emit) => {
       state.currentUser = Object.assign({}, data.currentUser, state.currentUser);
 
       emit('saveCurrentUser');

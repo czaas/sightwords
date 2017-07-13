@@ -5,8 +5,8 @@ const Nav = ({ state, actions }) => {
   return (
     <nav className="bottomBar">
       <a onclick={() => actions.router.go('/')}>Home</a>
-      <a className={showAccountLinks} onclick={() => actions.router.go('/manage-account')}>Manage account<br />{ state.currentUser.name }</a>
       <a className={showAccountLinks} onclick={() => actions.router.go('/choose-list-type')}>Choose List</a>
+      <a className={showAccountLinks} onclick={() => actions.router.go('/manage-account')}>Manage account<br />{ state.currentUser.name }</a>
     </nav>
   );
 };
@@ -14,7 +14,9 @@ const Nav = ({ state, actions }) => {
 export const ViewContainer = ({state, actions, className}, data) => {
   return (
     <main class={className}>
-      {data}
+      <section>
+        {data}
+      </section>
 
       <Nav state={state} actions={actions} />
     </main>

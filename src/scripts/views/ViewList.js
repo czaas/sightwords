@@ -5,7 +5,7 @@ export const ViewList = (state, actions, data, emit) => {
   let currentWord = state.currentWord;
   let noMoreWordsOnList = (!currentWord.word) ? 'show-list-complete' : '';
   let hideOnPracticeList = (state.currentListType === 'practice') ? 'hide' : '';
-  let showOnPracticeList = (state.currentListType === 'practice') ? '' : 'hide';
+  let showOnPracticeList = (currentWord.practice) ? '' : 'hide';
 
   return (
     <ViewContainer state={state} actions={actions} className={`play-game ${ noMoreWordsOnList }`}>
