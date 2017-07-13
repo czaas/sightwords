@@ -21,7 +21,7 @@ export const Home = (state, actions, data, emit) => {
       <h1>Sight Words</h1>
 
       <div class={showSelectUser}>
-        <h2>Select user</h2>
+        <h2>Who are you?</h2>
         <ul>
           {state.allUsers.map((user) => (
             <li><a onclick={() => {
@@ -31,10 +31,10 @@ export const Home = (state, actions, data, emit) => {
           ))}
         </ul>
 
-        <p>or</p>
+        <p>not here?</p>
       </div>
       <div>
-        <h2>Create new user</h2>
+        <h2>what is your name?</h2>
 
         <form>
           <label for="new-user-name" onsubmit={createNewUser}>

@@ -15,6 +15,11 @@ import 'whatwg-fetch';
 import { Home } from './views/Home.js';
 import { ChooseListType } from './views/ChooseListType.js';
 import { ViewList } from './views/ViewList.js';
+import { ManageAccount } from './views/ManageAccount.js';
+
+
+import ManageAccountObject from './views/ManageAccount.js';
+
 
 
 app({
@@ -174,6 +179,62 @@ app({
 
       return state;
     },
+
+    /** # manage account */
+    updateUser: (state, actions, data) => {
+      state.currentUser = Object.assign({}, data.currentUser, state.currentUser);
+
+      emit('saveCurrentUser');
+      return state;
+    },
+
+    /**
+    ## resetStateList
+    
+    updates state `currentUser.list`
+    */ 
+    resetStateList: (state, actions, dataList) => {
+      state.currentUser.list = dataList;
+      return state;
+    },
+
+    /**
+    ## resetList
+
+    - Looks on the element that was clicked for a `listType` value.
+    - loops through currentUserList
+    - emits to save user and fires an action to update state
+    */
+    resetList: (state, actions, data, emit) => {
+      console.log('reseeeet');
+
+      var list = data.listType;
+
+
+      var newList = [];
+
+      for (var i = 0; i < state.currentUser.list.length; i++) {
+        var currentWord = state.currentUser.list[i];
+
+        switch(list) {
+          case 'main':
+            currentWord.complete = false;
+            break;
+          case 'practice':
+            currentWord.practice = false;
+            break;
+
+          default:
+            break;
+        }
+
+        newList.push(currentWord);
+      }
+
+      actions.resetStateList(newList);
+      emit('saveCurrentUser');
+    },
+
   },
 
   events: {
@@ -183,6 +244,7 @@ app({
     loaded: (state, actions, data, emit) => {
       emit('checkAndFetchListIfNeeded');
       emit('getAllUsers');
+      console.log(state);
     },
     checkAndFetchListIfNeeded: (state, actions) => {
       let listRef = localStorage.getItem('sightwords--list');
@@ -258,5 +320,6 @@ app({
     ['/', Home],
     ['/choose-list-type', ChooseListType],
     ['/list', ViewList],
+    ['/manage-account', ManageAccount],
   ],
 });
