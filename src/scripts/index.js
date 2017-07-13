@@ -206,7 +206,6 @@ app({
     - emits to save user and fires an action to update state
     */
     resetList: (state, actions, data, emit) => {
-      console.log('reseeeet');
 
       var list = data.listType;
 
