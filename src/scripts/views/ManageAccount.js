@@ -2,12 +2,14 @@ import { h } from 'hyperapp';
 import { ViewContainer } from './_ViewContainer.js';
 
 
-export const ManageAccount = (state, actions, data, emit) => {
+export const ManageAccount = (state, actions, children) => {
   function saveName(e) {
     if (e) { e.preventDefault(); }
     let name = document.getElementById('name');
-    return name.value;
+
+    actions.saveName({ name: name.value });
   }
+
 
   return (
     <ViewContainer state={state} actions={actions}>
@@ -19,6 +21,7 @@ export const ManageAccount = (state, actions, data, emit) => {
           Hello,&nbsp;
           <input type="text" id="name" value={state.currentUser.name || ''} />
         </label>
+        <p><button>Save</button></p>
       </form>
 
       <form>

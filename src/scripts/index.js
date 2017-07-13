@@ -180,6 +180,7 @@ app({
       return state;
     },
 
+
     /** # manage account */
     updateUser: (state, actions, data) => {
       state.currentUser = Object.assign({}, data.currentUser, state.currentUser);
@@ -234,6 +235,28 @@ app({
       emit('saveCurrentUser');
     },
 
+    /**
+    ## saveName
+    ## stateSaveName
+
+    Fired on form submission
+
+    data.name = "new users name"
+
+    - saveName is fired by save state.
+     - fires stateSaveName
+     - emits [saveCurrentUser](actions.saveCurrentUser)
+    */
+
+    saveName: (state, actions, data, emit) => {
+      actions.stateSaveName({ name: data.name});
+      emit('saveCurrentUser');
+    },
+    stateSaveName: (state, actions, data) => {
+      console.log(data);
+      state.currentUser.name = data.name;
+      return state;
+    },
   },
 
   events: {
