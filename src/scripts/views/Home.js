@@ -31,15 +31,17 @@ export const Home = (state, actions, data, emit) => {
           ))}
         </ul>
 
-        <p>not here?</p>
+        <p>Not on this list? Sign up below:</p>
+
+        <hr />
       </div>
       <div>
-        <h2>what is your name?</h2>
+        <h2>What is your name?</h2>
 
         <form>
           <label for="new-user-name" onsubmit={createNewUser}>
             <input id="new-user-name" name="new-user-name" />
-            <button onclick={createNewUser}>Create User</button>
+            <p><button onclick={createNewUser}>Create User</button></p>
           </label>
         </form>
       </div>
