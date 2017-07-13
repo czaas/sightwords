@@ -10,16 +10,14 @@ export const ManageAccount = (state, actions, children) => {
     actions.saveName({ name: name.value });
   }
 
-
   return (
     <ViewContainer state={state} actions={actions}>
       <h2>Manage your account</h2>
 
-      
       <form onsubmit={saveName}>
         <label>
           Hello,&nbsp;
-          <input type="text" id="name" value={state.currentUser.name || ''} />
+          <input type="text" id="name" required value={state.currentUser.name || ''} />
         </label>
         <p><button>Save</button></p>
       </form>
