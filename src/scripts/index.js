@@ -244,20 +244,27 @@ app({
       emit('saveCurrentUser');
     },
     stateSaveName: (state, actions, data) => {
-      console.log(data);
       state.currentUser.name = data.name;
       return state;
+    },
+
+    /**
+    ## deleteUser 
+    */
+    deleteUser: (state, actions, data, emit) => {
+      emit('deleteUser');
+
+      actions.updateCurrentUser({});
     },
   },
 
   events: {
     update: (state) => {
-      //console.log(state);
+      // console.log(state);
     },
     loaded: (state, actions, data, emit) => {
       emit('checkAndFetchListIfNeeded');
       emit('getAllUsers');
-      console.log(state);
     },
     checkAndFetchListIfNeeded: (state, actions) => {
       let listRef = localStorage.getItem('sightwords--list');
@@ -326,6 +333,19 @@ app({
       });
       actions.updateAllUsers(allUsers);
       localStorage.setItem('sightwords--allUsers', JSON.stringify(allUsers));
+    },
+    deleteUser: (state, actions, data) => {
+      let allUsers = JSON.parse(localStorage.getItem('sightwords--allUsers'));
+      let oneLessUser = [];
+
+      for (var i= 0; i < state.allUsers.length; i++) {
+        if (state.allUsers[i].id !== state.currentUser.id) {
+          oneLessUser.push(state.allUsers[i]);
+        }
+      }
+
+      actions.updateAllUsers(oneLessUser);
+      localStorage.setItem('sightwords--allUsers', JSON.stringify(oneLessUser));
     },
   },
 
