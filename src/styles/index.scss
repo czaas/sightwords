@@ -43,3 +43,26 @@ body {
     }
   }
 }
+
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  height: 44px;
+  display: flex;
+  background: #222;
+  min-width: 100%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+
+  & > a {
+    margin-right: 10px; 
+    text-align: center;
+    padding: 5px;
+    color: #fff;
+    flex: 0 0 106px;
+  }
+}
+
+main {
+  padding-bottom: 44px;
+}

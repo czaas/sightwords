@@ -15,6 +15,11 @@ import 'whatwg-fetch';
 import { Home } from './views/Home.js';
 import { ChooseListType } from './views/ChooseListType.js';
 import { ViewList } from './views/ViewList.js';
+import { ManageAccount } from './views/ManageAccount.js';
+
+
+import ManageAccountObject from './views/ManageAccount.js';
+
 
 
 app({
@@ -81,31 +86,30 @@ app({
       return state;
     },
     removeFromPracticeAndMarkComplete: (state, actions, data, emit) => {
-      let mightBeNextWord = [];
-      let nextWord = {};
+      var mightBeNextWord = [];
+      var nextWord = {};
+      var foundWord = false;
 
-      state.currentUser.list = state.currentUser.list.map((word) => {
-        if (word.id === data.id) {
-          word.practice = false;
-          word.complete = true;
+      // Finding and updateing 
+      for (var i = 0; i < state.currentUser.list.length; i++)  {
+        var currentWord = state.currentUser.list[i];
+
+        if (currentWord.id === data.id) {
+          currentWord.practice = false;
+          currentWord.complete = true;
+
+          foundWord = true;
         }
 
-        if (word.practice) {
-          mightBeNextWord.push(word);
-        }
+        state.currentUser.list[i] = currentWord;
 
-        return word;
-      });
-
-      for (let i = 0; i < mightBeNextWord.length; i++) {
-        if (mightBeNextWord[i].sequence >= state.currentWord.sequence) {
-          nextWord = mightBeNextWord[i];
+        if (foundWord) {
+          i = state.currentUser.list.length;
         }
       }
 
-      emit('saveCurrentUser');
-      state.currentWord = nextWord;
-      return state;
+      actions.setNextWord();
+      actions.updateUser({ currentUser: state.currentUser });
     },
     leaveOnPracticeAndContinue: (state, actions, data) => {
       let setWordData = {
@@ -146,7 +150,6 @@ app({
       if (state.currentUser.list) {
         for (let i = 0; i < state.currentUser.list.length; i++) {
           let currentWord = state.currentUser.list[i];
-
           if (state.currentListType === 'default') {
             if (!currentWord.complete && !currentWord.practice) {
               foundWord = true;
@@ -174,11 +177,88 @@ app({
 
       return state;
     },
+
+
+    /** # manage account */
+    updateUser: (state, actions, data, emit) => {
+      state.currentUser = Object.assign({}, data.currentUser, state.currentUser);
+
+      emit('saveCurrentUser');
+      return state;
+    },
+
+    /**
+    ## resetList
+    ## resetStateList
+
+    - Looks on the element that was clicked for a `listType` value.
+    - loops through currentUserList
+    - emits to save user and fires an action to update state
+    */
+    resetList: (state, actions, data, emit) => {
+
+      var list = data.listType;
+
+
+      var newList = [];
+
+      for (var i = 0; i < state.currentUser.list.length; i++) {
+        var currentWord = state.currentUser.list[i];
+
+        switch(list) {
+          case 'main':
+            currentWord.complete = false;
+            break;
+          case 'practice':
+            currentWord.practice = false;
+            break;
+
+          default:
+            break;
+        }
+
+        newList.push(currentWord);
+      }
+
+      actions.resetStateList(newList);
+      emit('saveCurrentUser');
+    },
+    resetStateList: (state, actions, dataList) => {
+      state.currentUser.list = dataList;
+      return state;
+    },
+
+    /**
+    ## saveName
+    ## stateSaveName
+    data.name = "new user name"
+    - saveName is fired by save state.
+     - fires stateSaveName
+     - emits [saveCurrentUser](actions.saveCurrentUser)
+    */
+
+    saveName: (state, actions, data, emit) => {
+      actions.stateSaveName({ name: data.name});
+      emit('saveCurrentUser');
+    },
+    stateSaveName: (state, actions, data) => {
+      state.currentUser.name = data.name;
+      return state;
+    },
+
+    /**
+    ## deleteUser 
+    */
+    deleteUser: (state, actions, data, emit) => {
+      emit('deleteUser');
+
+      actions.updateCurrentUser({});
+    },
   },
 
   events: {
     update: (state) => {
-      //console.log(state);
+      // console.log(state);
     },
     loaded: (state, actions, data, emit) => {
       emit('checkAndFetchListIfNeeded');
@@ -252,11 +332,25 @@ app({
       actions.updateAllUsers(allUsers);
       localStorage.setItem('sightwords--allUsers', JSON.stringify(allUsers));
     },
+    deleteUser: (state, actions, data) => {
+      let allUsers = JSON.parse(localStorage.getItem('sightwords--allUsers'));
+      let oneLessUser = [];
+
+      for (var i= 0; i < state.allUsers.length; i++) {
+        if (state.allUsers[i].id !== state.currentUser.id) {
+          oneLessUser.push(state.allUsers[i]);
+        }
+      }
+
+      actions.updateAllUsers(oneLessUser);
+      localStorage.setItem('sightwords--allUsers', JSON.stringify(oneLessUser));
+    },
   },
 
   view: [
     ['/', Home],
     ['/choose-list-type', ChooseListType],
     ['/list', ViewList],
+    ['/manage-account', ManageAccount],
   ],
 });
