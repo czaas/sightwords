@@ -261,23 +261,63 @@ app({
 
 
 
-    updateWord: (state, actions) => {
-      
+    updateWord: (state, actions, data) => {
+      var currentListType = state.currentListType;
+      var foundWord = false;
+
+      if (!data && state.currentListType) {
+        data = (state.currentListType === 'all') ? 'complete' : 'practice';
+      }
+
+      if (state.currentUser.list) {
+        for (var i = 0; i < state.currentUser.list.length; i++) {
+          if (state.currentUser.list[i][data] === false) {
+            foundWord = true;
+
+            state.currentWord = state.currentUser.list[i];
+
+            if (state.currentUser.list[i + 1]) {
+              state.nextWord = state.currentUser.list[i + 1];
+            } else {
+              state.nextWord = undefined;
+            }
+
+            if (state.currentUser.list[i - 1]) {
+              state.previousWord = state.currentUser.list[i - 1];
+            } else {
+              state.previousWord = undefined;
+            }
+          }
+
+          // cancel list once found
+          if (foundWord) {
+            i = state.currentUser.list.length;
+          }
+        }
+      }
     },
     updateList: (state, actions, routerParams) => {
-      if (routerParams.params && routerParams.params.currentListType) {
-        state.currentListType = routerParams.params.currentListType;
-      }
+      state.currentListType = routerParams.params.currentListType;
 
       return state;
     },
   },
 
   events: {
-    route: (state, actions, data, emit) => {
-      // console.log('state', state, data);
-      actions.updateList(data);
-      actions.updateWord();
+    route: (state, actions, routerParams, emit) => {
+      if (routerParams.params &&  // if params exists
+          routerParams.params.currentListType && // currentListType param exists
+          routerParams.params.currentListType !== state.currentListType) { // and routeParam not equal to current list
+
+        // Update the list and update the word
+        actions.updateList(routerParams);
+        actions.updateWord(routerParams.params.currentListType);
+      }
+
+      // if current word doesn't exist, check for update
+      if (!state.currentWord.word) {
+        actions.updateWord();
+      }
     },
     update: (state, actions) => {
       // console.log(state);
