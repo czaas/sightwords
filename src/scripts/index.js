@@ -260,7 +260,36 @@ app({
 
 
 
+    setWord: (state, actions, newWordId) => {
+      var foundWord = false;
 
+      for (var i = 0; i < state.currentUser.list.length; i++) {
+        if (state.currentUser.list[i].id === newWordId) {
+          foundWord = true;
+          state.currentWord = state.currentUser.list[i];
+
+          if (state.currentUser.list[i + 1]) {
+            state.nextWord = state.currentUser.list[i + 1];
+          } else {
+            state.nextWord = {};
+          }
+
+          if (state.currentUser.list[i - 1]) {
+            state.previousWord = state.currentUser.list[i - 1];
+          } else {
+            state.previousWord = {};
+          }
+        }
+
+        // kill loop
+        if (foundWord) {
+          i = state.currentUser.list.length;
+        }
+        
+      } 
+
+      return state;
+    },
     updateWord: (state, actions, data) => {
       var currentListType = state.currentListType;
       var foundWord = false;
@@ -317,6 +346,13 @@ app({
       // if current word doesn't exist, check for update
       if (!state.currentWord.word) {
         actions.updateWord();
+      }
+
+      if (state.currentUser.list && 
+          routerParams.params.word && 
+          routerParams.params.word !== state.currentWord.id
+        ) {
+        actions.setWord(routerParams.params.word);
       }
     },
     update: (state, actions) => {

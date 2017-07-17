@@ -8,40 +8,47 @@ export const ViewList = (state, actions, data, emit) => {
   let disableIfNotPracticeWord = (!currentWord.practice) ? 'disabled' : '';
   let isCompleteText = (currentWord.complete) ? 'Remove from completed list.' : 'I said it out loud! Continue.';
 
+  var prevDisabled = '';
+  var nextDisabled = '';
+
+  if (!state.previousWord.id) {
+    prevDisabled = 'disabled';
+  }
+  if (!state.nextWord.id) {
+    nextDisabled = 'disabled';
+  }
+
+
+  function formChange(e) {
+    if (e) { e.preventDefault(); }
+
+    var complete = document.getElementById('complete');
+    var practice = document.getElementById('practice');
+
+    console.log(complete, practice);
+  } 
+
   return (
     <ViewContainer state={state} actions={actions} className={`play-game ${ noMoreWordsOnList }`}>
       <div className="current-word" currentWordSequnce={(state.currentWord.word) ? state.currentWord.sequence : ''}>
         <h2>{ currentWord.word }</h2>
 
-        {/* 
-          This button only shows up on main list. 
-          - It will mark word complete and set the next word.
-        */}
-        <p className={disableOnPracticeList}><a onclick={ () => { 
-          if (!currentWord.complete) {
-            actions.toggleComplete(currentWord); 
-            actions.setNextWord(); 
-          } else {
-            actions.toggleComplete(currentWord);
-          }
-        }}>{isCompleteText}</a></p>
+        <form onchange={formChange}>
+          <label for="complete">
+            Complete
+            <input type="checkbox" id="complete" name="complete" />
+          </label>
+          <br />
+          <label for="practice">
+            Practice
+            <input type="checkbox" id="practice" name="practice" />
+          </label>
+        </form>
 
-        {/* 
-          This button shows up on both lists. 
-          - If the current word IS NOT on the practice list, this will allow you to add it to the practice list.
-          - If the current word IS on the practice list, this will allow you to remove it from the practice list.
-        */}
-        <p><a onclick={ () => {
-          if (currentWord.practice) { 
-            actions.removeFromPracticeAndMarkComplete(currentWord);
-          } else {
-            actions.addToPractice(currentWord);
-            actions.setNextWord(); 
-          }
-        }}>{ (currentWord.practice) ? 'Remove from' : 'Add to' } practice list and continue.</a></p>
+        <hr />
 
-        <p><a onclick={() => actions.router.go(`/list/${state.currentListType}/${state.previousWord.id}`)}>Previous</a>
-        <a onclick={() => actions.router.go(`/list/${state.currentListType}/${state.nextWord.id}`)}>Next</a></p>
+        <p><a className={prevDisabled} onclick={() => actions.router.go(`/list/${state.currentListType}/${state.previousWord.id}`)}>Previous</a>
+        <a className={nextDisabled} onclick={() => actions.router.go(`/list/${state.currentListType}/${state.nextWord.id}`)}>Next</a></p>
       </div>
 
       {/*

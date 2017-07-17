@@ -41,7 +41,7 @@ export const ChooseListType = (state, actions, data, emit) => {
     <ViewContainer state={state} actions={actions}>
       <h2>Choose List Type</h2>
 
-      <p><a onclick={() => actions.router.go(`/list/all`)}>All words List <span>{mainListCount} / {(state.currentUser.list) ? state.currentUser.list.length : undefined}</span></a></p>
+      <p><a onclick={() => actions.router.go(`/list/all/${ state.currentWord.id }`)}>All words List <span>{mainListCount} / {(state.currentUser.list) ? state.currentUser.list.length : undefined}</span></a></p>
       <p>or</p>
       <p><a className={disableIfNoPracticeWords} onclick={() => actions.router.go('/list/practice')}>Your practice List <span>{practiceListCount}</span></a></p>
     </ViewContainer>
