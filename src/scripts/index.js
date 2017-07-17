@@ -29,9 +29,12 @@ app({
   state: {
     allUsers: [],
     currentUser: {},
-    currentListType: 'default', // default || practice
+    currentListType: 'all', // all || practice
     currentWord: {},
     showCongratsScreen: false,
+
+    previousWord: {},
+    nextWord: {},
   },
 
   actions: {
@@ -61,10 +64,10 @@ app({
     },
 
     // Game list actions
-    markComplete: (state, actions, data, emit) => {
+    toggleComplete: (state, actions, data, emit) => {
       state.currentUser.list = state.currentUser.list.map((word) => {
         if (word.id === data.id) {
-          word.complete = true;
+          word.complete = !word.complete;
         }
 
         return word;
@@ -150,7 +153,7 @@ app({
       if (state.currentUser.list) {
         for (let i = 0; i < state.currentUser.list.length; i++) {
           let currentWord = state.currentUser.list[i];
-          if (state.currentListType === 'default') {
+          if (state.currentListType === 'list') {
             if (!currentWord.complete && !currentWord.practice) {
               foundWord = true;
               word = currentWord;
@@ -254,10 +257,29 @@ app({
 
       actions.updateCurrentUser({});
     },
+
+
+
+
+    updateWord: (state, actions) => {
+      
+    },
+    updateList: (state, actions, routerParams) => {
+      if (routerParams.params && routerParams.params.currentListType) {
+        state.currentListType = routerParams.params.currentListType;
+      }
+
+      return state;
+    },
   },
 
   events: {
-    update: (state) => {
+    route: (state, actions, data, emit) => {
+      // console.log('state', state, data);
+      actions.updateList(data);
+      actions.updateWord();
+    },
+    update: (state, actions) => {
       // console.log(state);
     },
     loaded: (state, actions, data, emit) => {
@@ -350,7 +372,9 @@ app({
   view: [
     ['/', Home],
     ['/choose-list-type', ChooseListType],
-    ['/list', ViewList],
+    ['/list/:currentListType', ViewList],
+    ['/list/all/:word', ViewList],
+    ['/list/practice/:word', ViewList],
     ['/manage-account', ManageAccount],
   ],
 });
