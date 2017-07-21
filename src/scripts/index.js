@@ -181,6 +181,24 @@ app({
       return state;
     },
 
+    updateCurrentWord: (state, actions, wordToUpdate, emit) => {
+      var foundWord = false;
+
+      for (var i = 0; i < state.currentUser.list.length; i++) {
+        if (state.currentUser.list[i].id === wordToUpdate.id) {
+          state.currentUser.list[i] = wordToUpdate;
+          foundWord = true;
+        }
+
+        if (foundWord) {
+          i = state.currentUser.list.length;
+        }
+      }
+
+      emit('saveCurrentUser');
+      return state;
+    },
+
 
     /** # manage account */
     updateUser: (state, actions, data, emit) => {

@@ -11,21 +11,23 @@ export const ViewList = (state, actions, data, emit) => {
   var prevDisabled = '';
   var nextDisabled = '';
 
-  if (!state.previousWord.id) {
+  if (state.previousWord && !state.previousWord.id) {
     prevDisabled = 'disabled';
   }
   if (!state.nextWord.id) {
     nextDisabled = 'disabled';
   }
 
-
   function formChange(e) {
     if (e) { e.preventDefault(); }
 
-    var complete = document.getElementById('complete');
-    var practice = document.getElementById('practice');
+    var complete = document.getElementById('complete').checked;
+    var practice = document.getElementById('practice').checked;
 
-    console.log(complete, practice);
+    currentWord.complete = complete;
+    currentWord.practice = practice;
+    
+    actions.updateCurrentWord(currentWord);
   } 
 
   return (
@@ -36,12 +38,12 @@ export const ViewList = (state, actions, data, emit) => {
         <form onchange={formChange}>
           <label for="complete">
             Complete
-            <input type="checkbox" id="complete" name="complete" />
+            <input type="checkbox" id="complete" name="complete" value="true" checked={state.currentWord.complete} />
           </label>
           <br />
           <label for="practice">
             Practice
-            <input type="checkbox" id="practice" name="practice" />
+            <input type="checkbox" id="practice" name="practice" value="true" checked={state.currentWord.practice} />
           </label>
         </form>
 
