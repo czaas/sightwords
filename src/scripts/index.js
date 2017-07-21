@@ -181,6 +181,11 @@ app({
       return state;
     },
 
+    /**
+    @param {object} - wordToUpdate is passed in as data value
+
+    This updates the current users list then saves to localStorage
+    */
     updateCurrentWord: (state, actions, wordToUpdate, emit) => {
       var foundWord = false;
 
@@ -196,6 +201,54 @@ app({
       }
 
       emit('saveCurrentUser');
+      return state;
+    },
+
+    /**
+    @param {string} - listType "all/practice"
+
+    Set when choose list is chosen this sets the current/next/prev word based on last complete or first on practice list.
+    */
+    setNextCurrentWord: (state, actions, listType, emit) => {
+      switch(listType) {
+        case 'all':
+          var foundWord = false;
+
+          for (var i = 0; i < state.currentUser.list.length; i++) {
+            if (!state.currentUser.list[i].complete) {
+              state.currentWord = state.currentUser.list[i];
+              state.previousWord = state.currentUser.list[i - 1];
+              state.nextWord = state.currentUser.list[i + 1];
+
+              foundWord = true;
+            }
+
+            if (foundWord) {
+              i = state.currentUser.list.length;
+            }
+          }
+          break;
+        case 'practice':
+          var foundWord = false;
+
+          for (var i = 0; i < state.currentUser.list.length; i++) {
+            if (state.currentUser.list[i].practice) {
+              state.currentWord = state.currentUser.list[i];
+              state.previousWord = state.currentUser.list[i - 1];
+              state.nextWord = state.currentUser.list[i + 1];
+
+              foundWord = true;
+            }
+
+            if (foundWord) {
+              i = state.currentUser.list.length;
+            }
+          }
+          break;
+        default: 
+          break;
+      }
+
       return state;
     },
 
