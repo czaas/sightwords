@@ -251,6 +251,9 @@ app({
 
       return state;
     },
+    nextPracticeWord: (state, actions, data, emit) => {
+      
+    },
 
 
     /** # manage account */

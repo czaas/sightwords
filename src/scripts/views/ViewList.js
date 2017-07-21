@@ -35,6 +35,7 @@ export const ViewList = (state, actions, data, emit) => {
       <div className="current-word" currentWordSequnce={(state.currentWord.word) ? state.currentWord.sequence : ''}>
         <h2>{ currentWord.word }</h2>
 
+        <p>{state.currentWord.sequence} / {state.currentUser.list.length}</p>
         <form onchange={formChange}>
           <label for="complete">
             Complete
