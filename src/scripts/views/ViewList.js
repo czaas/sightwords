@@ -28,7 +28,7 @@ export const ViewList = (state, actions, data, emit) => {
     currentWord.practice = practice;
     
     actions.updateCurrentWord(currentWord);
-  } 
+  }
 
   return (
     <ViewContainer state={state} actions={actions} className={`play-game ${ noMoreWordsOnList }`}>
@@ -50,8 +50,12 @@ export const ViewList = (state, actions, data, emit) => {
 
         <hr />
 
-        <p><a className={prevDisabled} onclick={() => actions.router.go(`/list/${state.currentListType}/${state.previousWord.id}`)}>Previous</a>
-        <a className={nextDisabled} onclick={() => actions.router.go(`/list/${state.currentListType}/${state.nextWord.id}`)}>Next</a></p>
+        <p><a className={prevDisabled} onclick={() => {
+          actions.router.go(`/list/${state.currentListType}/${state.previousWord.id}`);
+        }}>Previous</a>
+        <a className={nextDisabled} onclick={() => {
+          actions.router.go(`/list/${state.currentListType}/${state.nextWord.id}`);
+        }}>Next</a></p>
       </div>
 
       {/*
