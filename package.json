@@ -1,7 +1,7 @@
 {
-  "name": "SightWords",
+  "name": "czaas test project",
   "version": "0.1.0",
-  "description": "Sight Words app for memorizing common words to be able to read on sight one word at a time. Practice and save your progress as your children learn their sight words.",
+  "description": "",
   "scripts": {
     "build": "webpack --config webpack-prod.config.js --colors",
     "dev": "webpack-dev-server --config webpack-dev.config.js --watch --colors"

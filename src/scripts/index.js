@@ -24,7 +24,7 @@ app({
 
   view: (state, actions) => (
     <main class="container">
-      <h1>Sight Words</h1>
+      <h1>Zaas test package</h1>
     </main>
   ),
 });
