@@ -3,10 +3,6 @@ import { ViewContainer } from './_ViewContainer.js';
 
 export const ViewList = (state, actions, data, emit) => {
   let currentWord = state.currentWord;
-  let noMoreWordsOnList = (!currentWord.word) ? 'show-list-complete' : '';
-  let disableOnPracticeList = (state.currentListType === 'practice') ? 'disabled' : '';
-  let disableIfNotPracticeWord = (!currentWord.practice) ? 'disabled' : '';
-  let isCompleteText = (currentWord.complete) ? 'Remove from completed list.' : 'I said it out loud! Continue.';
 
   var prevDisabled = '';
   var nextDisabled = '';
@@ -31,11 +27,13 @@ export const ViewList = (state, actions, data, emit) => {
   }
 
   return (
-    <ViewContainer state={state} actions={actions} className={`play-game ${ noMoreWordsOnList }`}>
+    <ViewContainer state={state} actions={actions} className={`play-game`}>
       <div className="current-word" currentWordSequnce={(state.currentWord.word) ? state.currentWord.sequence : ''}>
         <h2>{ currentWord.word }</h2>
 
-        <p>{state.currentWord.sequence} / {state.currentUser.list.length}</p>
+        <p className={(state.currentListType === 'practice') ? 'hide' : ''}>{state.currentWord.sequence} / {state.currentUser.list.length}</p>
+        <p className={(state.currentListType === 'all') ? 'hide' : ''}>{state.currentUser.list.filter((word) => word.practice).indexOf(state.currentWord) + 1} / {state.currentUser.list.filter((word) => word.practice).length}</p>
+
         <form onchange={formChange}>
           <label for="complete">
             Complete
@@ -56,15 +54,6 @@ export const ViewList = (state, actions, data, emit) => {
         <a className={nextDisabled} onclick={() => {
           actions.router.go(`/list/${state.currentListType}/${state.nextWord.id}`);
         }}>Next</a></p>
-      </div>
-
-      {/*
-        When the current list is empty or has passed the last word, this message will be displayed.
-      */}
-      <div className="list-complete">
-        <p>You've completed { (state.currentListType === 'practice') ? 'your practice list' : 'all of your sight words' }!</p>
-
-        <p><a onclick={() => actions.router.go('/choose-list-type')}>Choose a different list</a> or <a onclick={() => actions.router.go('/')}>Go Home</a></p>
       </div>
     </ViewContainer>
   );

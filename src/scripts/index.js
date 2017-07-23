@@ -54,30 +54,12 @@ app({
       actions.router.go('/choose-list-type');
     },
 
-    setWord: (state, actions, newWordId) => {
-      var foundWord = false;
-
-      for (var i = 0; i < state.currentUser.list.length; i++) {
-        if (state.currentUser.list[i].id === newWordId) {
-          foundWord = true;
-          state.currentWord = state.currentUser.list[i];
-        }
-
-        // kill loop
-        if (foundWord) {
-          i = state.currentUser.list.length;
-        }
-      } 
-      actions.setNextAndPrevWord();
-      return state;
-    },
-
     /**
     
     */
     setCurrentNextAndPrevWord: (state, actions, currentWord, emit) => {
       var wordIdToGet = currentWord;
-      
+
       switch(state.currentListType) {
         case 'all':
           var foundWord = false;
@@ -141,17 +123,10 @@ app({
     },
 
     /** # manage account */
-    updateUser: (state, actions, data, emit) => {
-      state.currentUser = Object.assign({}, data.currentUser, state.currentUser);
-
-      emit('saveCurrentUser');
-      return state;
-    },
-
     /**
+    ## updateCurrentWord
     @param {object} - wordToUpdate is passed in as data value
-
-    This updates the current users list then saves to localStorage
+    This updates a single word when changing the state of complete or practice. 
     */
     updateCurrentWord: (state, actions, wordToUpdate, emit) => {
       var foundWord = false;
@@ -264,7 +239,6 @@ app({
           routerParams.params.word && 
           routerParams.params.word !== state.currentWord.id
         ) {
-        // actions.setWord(routerParams.params.word);
         actions.setCurrentNextAndPrevWord(routerParams.params.word);
       }
     },

@@ -20,8 +20,6 @@ export const ChooseListType = (state, actions, data, emit) => {
     return hasPracticeWords;
   }
 
-  let disableIfNoPracticeWords = (hasPracticeWords()) ? '' : 'disabled';
-
   var mainListCount = 0;
   var practiceListCount = 0;
 
@@ -47,7 +45,7 @@ export const ChooseListType = (state, actions, data, emit) => {
         actions.router.go(`/list/all`);
       }}>All words List <span>{mainListCount} / {(state.currentUser.list) ? state.currentUser.list.length : undefined}</span></a></p>
       <p>or</p>
-      <p><a className={disableIfNoPracticeWords} onclick={() => {
+      <p><a className={(hasPracticeWords()) ? '' : 'disabled'} onclick={() => {
         actions.updateList('practice');
         actions.setCurrentNextAndPrevWord();
         actions.router.go(`/list/practice`);
