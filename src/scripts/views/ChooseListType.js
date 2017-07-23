@@ -20,8 +20,6 @@ export const ChooseListType = (state, actions, data, emit) => {
     return hasPracticeWords;
   }
 
-  let disableIfNoPracticeWords = (hasPracticeWords()) ? '' : 'disabled';
-
   var mainListCount = 0;
   var practiceListCount = 0;
 
@@ -41,9 +39,17 @@ export const ChooseListType = (state, actions, data, emit) => {
     <ViewContainer state={state} actions={actions}>
       <h2>Choose List Type</h2>
 
-      <p><a onclick={() => actions.updateGameType('default')}>All words List <span>{mainListCount} / {(state.currentUser.list) ? state.currentUser.list.length : undefined}</span></a></p>
+      <p><a onclick={() => {
+        actions.updateList('all');
+        actions.setCurrentNextAndPrevWord();
+        actions.router.go(`/list/all`);
+      }}>All words List <span>{mainListCount} / {(state.currentUser.list) ? state.currentUser.list.length : undefined}</span></a></p>
       <p>or</p>
-      <p><a className={disableIfNoPracticeWords} onclick={() => actions.updateGameType('practice')}>Your practice List <span>{practiceListCount}</span></a></p>
+      <p><a className={(hasPracticeWords()) ? '' : 'disabled'} onclick={() => {
+        actions.updateList('practice');
+        actions.setCurrentNextAndPrevWord();
+        actions.router.go(`/list/practice`);
+      }}>Your practice List <span>{practiceListCount}</span></a></p>
     </ViewContainer>
   );
 };

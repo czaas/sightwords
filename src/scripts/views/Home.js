@@ -10,10 +10,13 @@ export const Home = (state, actions, data, emit) => {
 
     let newNameElement = document.getElementById('new-user-name');
 
-    let newName = newNameElement.value;
-    actions.createNewUser(newName);
+    let newName = newNameElement.value.trim('');
+    
+    if (newName !== '') {
+      actions.createNewUser(newName);
 
-    newNameElement.value = '';
+      newNameElement.value = '';
+    }
   }
 
   return (
