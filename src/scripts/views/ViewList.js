@@ -31,8 +31,8 @@ export const ViewList = (state, actions, data, emit) => {
       <div className="current-word" currentWordSequnce={(state.currentWord.word) ? state.currentWord.sequence : ''}>
         <h2>{ currentWord.word }</h2>
 
-        <p className={(state.currentListType === 'practice') ? 'hide' : ''}>{state.currentWord.sequence} / {state.currentUser.list.length}</p>
-        <p className={(state.currentListType === 'all') ? 'hide' : ''}>{state.currentUser.list.filter((word) => word.practice).indexOf(state.currentWord) + 1} / {state.currentUser.list.filter((word) => word.practice).length}</p>
+        <p className={(state.currentListType === 'practice') ? 'hide' : ''}>All words list<br /> {state.currentWord.sequence} / {state.currentUser.list.length}</p>
+        <p className={(state.currentListType === 'all') ? 'hide' : ''}>Your practice<br /> {state.currentUser.list.filter((word) => word.practice).indexOf(state.currentWord) + 1} / {state.currentUser.list.filter((word) => word.practice).length}</p>
 
         <form onchange={formChange}>
           <label for="complete">
