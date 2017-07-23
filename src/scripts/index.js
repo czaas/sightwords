@@ -75,19 +75,31 @@ app({
     /**
     
     */
-    setNextAndPrevWord: (state, actions, currentWord, emit) => {
+    setCurrentNextAndPrevWord: (state, actions, currentWord, emit) => {
+      var wordIdToGet = currentWord;
+      
       switch(state.currentListType) {
         case 'all':
           var foundWord = false;
 
           for (var i = 0; i < state.currentUser.list.length; i++) {
-            if (!state.currentWord.complete && state.currentUser.list[i].id === state.currentWord.id) {
-              state.previousWord = state.currentUser.list[i - 1] || {};
-              state.nextWord = state.currentUser.list[i + 1] || {};
+            if (wordIdToGet) {
+              if (state.currentUser.list[i].id === wordIdToGet) {
+                state.previousWord = state.currentUser.list[i - 1] || {};
+                state.nextWord = state.currentUser.list[i + 1] || {};
+                state.currentWord = state.currentUser.list[i] || {};
 
-              foundWord = true;
+                foundWord = true;
+              }
+            } else {
+              if (!state.currentUser.list[i].complete) {
+                state.previousWord = state.currentUser.list[i - 1] || {};
+                state.nextWord = state.currentUser.list[i + 1] || {};
+                state.currentWord = state.currentUser.list[i] || {};
+
+                foundWord = true;
+              }
             }
-
             if (foundWord) {
               i = state.currentUser.list.length;
             }
@@ -98,11 +110,22 @@ app({
           var foundWord = false;
 
           for (var i = 0; i < practiceWordsOnly.length; i++) {
-            if (practiceWordsOnly[i].id === state.currentWord.id) {
-              state.previousWord = practiceWordsOnly[i - 1] || {};
-              state.nextWord = practiceWordsOnly[i + 1] || {};
+            if (wordIdToGet) {
+              if (practiceWordsOnly[i].id === wordIdToGet && practiceWordsOnly[i].practice) {
+                state.previousWord = practiceWordsOnly[i - 1] || {};
+                state.nextWord = practiceWordsOnly[i + 1] || {};
+                state.currentWord = practiceWordsOnly[i] || {};
 
-              foundWord = true;
+                foundWord = true;
+              }
+            } else {
+              if (practiceWordsOnly[i].practice) {
+                state.previousWord = practiceWordsOnly[i - 1] || {};
+                state.nextWord = practiceWordsOnly[i + 1] || {};
+                state.currentWord = practiceWordsOnly[i] || {};
+
+                foundWord = true;
+              }
             }
 
             if (foundWord) {
@@ -215,8 +238,8 @@ app({
       actions.updateCurrentUser({});
     },
 
-    updateList: (state, actions, routerParams) => {
-      state.currentListType = routerParams.params.currentListType;
+    updateList: (state, actions, currentListType) => {
+      state.currentListType = currentListType;
 
       return state;
     },
@@ -231,7 +254,7 @@ app({
           routerParams.params.currentListType && // currentListType param exists
           routerParams.params.currentListType !== state.currentListType) { // and routeParam not equal to current list
 
-        actions.updateList(routerParams);
+        actions.updateList(routerParams.params.currentListType);
       }
 
       /*
@@ -241,9 +264,8 @@ app({
           routerParams.params.word && 
           routerParams.params.word !== state.currentWord.id
         ) {
-        actions.setWord(routerParams.params.word);
-      } else if (!state.currentWord.id) {
-        console.log('no current word');
+        // actions.setWord(routerParams.params.word);
+        actions.setCurrentNextAndPrevWord(routerParams.params.word);
       }
     },
     update: (state, actions) => {
