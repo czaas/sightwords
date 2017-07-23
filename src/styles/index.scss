@@ -47,19 +47,21 @@ body {
 .bottomBar {
   position: fixed;
   bottom: 0;
-  height: 44px;
+  height: 60px;
+
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
   background: #222;
   min-width: 100%;
-  overflow-x: scroll;
-  overflow-y: hidden;
 
   & > a {
-    margin-right: 10px; 
     text-align: center;
     padding: 5px;
     color: #fff;
-    flex: 0 0 106px;
+    flex: 0 0 31%;
+    font-size: 12px;
   }
 }
 
