@@ -2,44 +2,18 @@ import { h } from 'hyperapp';
 import { ViewContainer } from './_ViewContainer.js';
 
 export const ChooseListType = (state, actions, data, emit) => {
-  function hasPracticeWords() {
-    let hasPracticeWords = false;
-
-    if (state.currentUser.list) {
-      for (let i = 0; i < state.currentUser.list.length; i++) {
-        if (state.currentUser.list[i].practice === true) {
-          hasPracticeWords = true;
-        }
-
-        if (hasPracticeWords === true) {
-          i = state.currentUser.list.length;
-        }
-      }
-    }
-
-    return hasPracticeWords;
-  }
-
-  var mainListCount = 0;
-  var practiceListCount = 0;
-
-  if (state.currentUser.list) {
-    for (var i = 0; i < state.currentUser.list.length; i++) {
-      if (state.currentUser.list[i].complete) {
-        mainListCount++;
-      }
-
-      if (state.currentUser.list[i].practice) {
-        practiceListCount++;
-      }
-    }
-  }
+  var mainListCount = state.currentUser.list.filter((word) => word.complete).length;
+  var practiceListCount = state.currentUser.list.filter((word) => word.practice).length;
 
   return (
     <ViewContainer state={state} actions={actions} className="choose-list">
       <h2>Choose List Type</h2>
 
       <p>Learn Your Sight Words</p>
+
+      <blockquote>
+        <p><em>You have completed</em> {mainListCount} of {state.currentUser.list.length} words.</p>
+      </blockquote>
 
       <button onclick={() => {
         actions.updateList('all');
@@ -51,7 +25,10 @@ export const ChooseListType = (state, actions, data, emit) => {
 
       <p>Practice Time!</p>
 
-      <button className={(hasPracticeWords()) ? '' : 'disabled'} onclick={() => {
+      <blockquote>
+        <p><em>You have {practiceListCount} word{practiceListCount === 1 ? '' : 's'} on your practice list.</em></p>
+      </blockquote>
+      <button className={(practiceListCount >= 1) ? '' : 'disabled'} onclick={() => {
         actions.updateList('practice');
         actions.setCurrentNextAndPrevWord();
         actions.router.go(`/list/practice`);
