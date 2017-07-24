@@ -48,7 +48,7 @@ export const Home = (state, actions, data, emit) => {
 
         <form>
           <label for="new-user-name" onsubmit={createNewUser}>
-            <input id="new-user-name" name="new-user-name" placeholder="What is your name?" />
+            <input id="new-user-name" name="new-user-name" placeholder="What is your name?" type="text" />
             <p><button onclick={createNewUser}>Create User</button></p>
           </label>
         </form>

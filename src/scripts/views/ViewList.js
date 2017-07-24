@@ -24,12 +24,13 @@ export const ViewList = (state, actions, data, emit) => {
     currentWord.practice = practice;
     
     actions.updateCurrentWord(currentWord);
+    document.getElementById('next-word').click();
   }
 
   return (
-    <ViewContainer state={state} actions={actions} className={`play-game`}>
+    <ViewContainer state={state} actions={actions} className={`view-list`}>
       <div className="current-word" currentWordSequnce={(state.currentWord.word) ? state.currentWord.sequence : ''}>
-        <h2>{ currentWord.word }</h2>
+        <h1>{ currentWord.word }</h1>
 
         <p className={(state.currentListType === 'practice') ? 'hide' : ''}>All words list<br /> {state.currentWord.sequence} / {state.currentUser.list.length}</p>
         <p className={(state.currentListType === 'all') ? 'hide' : ''}>Your practice<br /> {state.currentUser.list.filter((word) => word.practice).indexOf(state.currentWord) + 1} / {state.currentUser.list.filter((word) => word.practice).length}</p>
@@ -39,7 +40,7 @@ export const ViewList = (state, actions, data, emit) => {
             Complete
             <input type="checkbox" id="complete" name="complete" value="true" checked={state.currentWord.complete} />
           </label>
-          <br />
+
           <label for="practice">
             Practice
             <input type="checkbox" id="practice" name="practice" value="true" checked={state.currentWord.practice} />
@@ -48,10 +49,10 @@ export const ViewList = (state, actions, data, emit) => {
 
         <hr />
 
-        <p><a className={prevDisabled} onclick={() => {
+        <p className="prev-next-buttons"><a className={`${prevDisabled} button button-outline`} onclick={() => {
           actions.router.go(`/list/${state.currentListType}/${state.previousWord.id}`);
         }}>Previous</a>
-        <a className={nextDisabled} onclick={() => {
+        <a className={`${nextDisabled}  button button-outline`} id="next-word" onclick={() => {
           actions.router.go(`/list/${state.currentListType}/${state.nextWord.id}`);
         }}>Next</a></p>
       </div>
