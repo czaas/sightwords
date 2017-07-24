@@ -36,6 +36,11 @@ app({
 
     previousWord: {},
     nextWord: {},
+    notification: {
+      show: false,
+      message: '',
+      type: '',
+    },
   },
 
   actions: {
@@ -217,6 +222,50 @@ app({
     updateList: (state, actions, currentListType) => {
       state.currentListType = currentListType;
 
+      return state;
+    },
+
+    displayNotification: (state, actions, data, emit) => {
+      // triggers show & hide notification
+      var message = data.message;
+      var timeout = data.timeout || 1500;
+      var type = data.type || '';
+
+      if (message) {
+        actions.setNotification(message);
+        actions.showNotification(type);
+
+        setTimeout(() => {
+          actions.hideNotification();
+
+          setTimeout(() => {
+            actions.clearNotification();
+          }, 300);
+        }, timeout);
+      }
+    },
+    earlyHideNotification: (state, actions) => {
+      actions.hideNotification();
+
+      setTimeout(() => {
+        actions.clearNotification();
+      }, 300);
+    },
+    showNotification: (state, actions, notificationType) => {
+      state.notification.type = notificationType;
+      state.notification.show = true;
+      return state;
+    },
+    hideNotification: (state, actions) => {
+      state.notification.show = false;
+      return state;
+    },
+    setNotification: (state, actions, message) => {
+      state.notification.message = message;
+      return state;
+    },
+    clearNotification: (state, actions) => {
+      state.notification.message = '';
       return state;
     },
   },
