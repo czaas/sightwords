@@ -1,5 +1,16 @@
+$color-initial: #fff;
+$color-primary: red;
+$color-secondary: #606c76;
+$color-tertiary: #f4f5f6;
+$color-quaternary: #d1d1d1;
+$color-quinary: #e1e1e1;
+
+@import './../../node_modules/milligram/src/milligram';
+
+
 body {
   margin: 0;
+  padding: 15px;
 }
 
 * {
@@ -18,35 +29,10 @@ body {
   pointer-events: none;
 }
 
-.play-game {
-  .list-complete,
-  .congrats-screen {
-    display: none;
-  }
-
-  &.show-list-complete {
-    .current-word {
-      display: none;
-    }
-
-    .list-complete {
-      display: block;
-    }
-  }
-  &.show-congrats-screen {
-    .congrats-screen {
-      display: block;
-    }
-
-    .current-word {
-      display: none;
-    }
-  }
-}
-
 .bottomBar {
   position: fixed;
   bottom: 0;
+  left: 0;
   height: 60px;
 
   display: flex;
@@ -71,4 +57,49 @@ main {
 
 input {
   border: 1px solid #000;
+}
+
+a {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+/**
+  Views
+*/
+.choose-list {
+  button {
+    display: block;
+    width: 100%;
+    text-align: center;
+    max-width: 500px;
+  }
+}
+
+.view-list {
+  text-align: center;
+
+  h1 {
+    margin: 3rem 0;
+  }
+  label, input {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+/** 
+  Comopnents 
+*/
+.prev-next-buttons {
+  display: flex;
+  justify-content: space-between;
+
+  & > a {
+    flex: 0 0 49%;
+    width: 100%;
+    max-width: 49%;
+  }
 }
