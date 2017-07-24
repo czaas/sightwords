@@ -36,7 +36,7 @@ export const ManageAccount = (state, actions, children) => {
   }
 
   return (
-    <ViewContainer state={state} actions={actions}>
+    <ViewContainer state={state} actions={actions} className="manage-account">
       <h2>Manage your account</h2>
 
       <form onsubmit={saveName}>
@@ -47,22 +47,28 @@ export const ManageAccount = (state, actions, children) => {
         <p><button>Save</button></p>
       </form>
 
+      <hr />
+
       <p><a onclick={() => {
         actions.resetList({ listType: 'main' });
         actions.displayNotification({
           'message': 'Main list reset',
           'type': 'success',
         });
-      }}>Reset Main List</a></p>
+      }}
+      className="button button-outline"
+      >Reset Main List</a></p>
       <p><a onclick={() => {
         actions.resetList({ listType: 'practice' });
         actions.displayNotification({
           'message': 'Practice list reset',
           'type': 'success',
         });
-      }}>Reset Practice List</a></p>
+      }}
+      className="button button-outline"
+      >Reset Practice List</a></p>
 
-      <p><a onclick={confirmDeleteUser}>Delete Account</a></p>
+      <p><a className="button button-outline" onclick={confirmDeleteUser}>Delete Account</a></p>
     </ViewContainer>
   );
 };
