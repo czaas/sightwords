@@ -8,6 +8,10 @@ export const ManageAccount = (state, actions, children) => {
     let name = document.getElementById('name');
 
     actions.saveName({ name: name.value });
+    actions.displayNotification({
+      message: 'Your name has been updated.',
+      type: 'success',
+    });
   }
 
   function confirmDeleteUser(e) {
@@ -16,7 +20,18 @@ export const ManageAccount = (state, actions, children) => {
 
     if (confirmation) {
       actions.deleteUser();
+      actions.displayNotification({
+        message: 'Account deleted.',
+        type: 'success',
+        timeout: 2000,
+      });
       actions.router.go('/');
+    } else {
+      actions.displayNotification({
+        message: 'You entered your name inccorectly.',
+        type: 'error',
+        timeout: 2000,
+      });
     }
   }
 
@@ -32,8 +47,20 @@ export const ManageAccount = (state, actions, children) => {
         <p><button>Save</button></p>
       </form>
 
-      <p><a onclick={() => actions.resetList({ listType: 'main' })}>Reset Main List</a></p>
-      <p><a onclick={() => actions.resetList({ listType: 'practice' })}>Reset Practice List</a></p>
+      <p><a onclick={() => {
+        actions.resetList({ listType: 'main' });
+        actions.displayNotification({
+          'message': 'Main list reset',
+          'type': 'success',
+        });
+      }}>Reset Main List</a></p>
+      <p><a onclick={() => {
+        actions.resetList({ listType: 'practice' });
+        actions.displayNotification({
+          'message': 'Practice list reset',
+          'type': 'success',
+        });
+      }}>Reset Practice List</a></p>
 
       <p><a onclick={confirmDeleteUser}>Delete Account</a></p>
     </ViewContainer>
