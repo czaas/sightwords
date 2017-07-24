@@ -23,8 +23,13 @@ export const Home = (state, actions, data, emit) => {
     <ViewContainer state={state} actions={actions} className='home'>
       <h1>Sight Words</h1>
 
+      <p>Sight Words app for memorizing common words to be able to read on sight one word at a time. Practice and save your childrens progress as your they learn their sight words.</p>
+
+      <hr />
+
       <div class={showSelectUser}>
-        <h2>Who are you?</h2>
+
+        <p><strong>Have an account?</strong> Choose yours below:</p>
         <ul>
           {state.allUsers.map((user) => (
             <li><a onclick={() => {
@@ -39,11 +44,11 @@ export const Home = (state, actions, data, emit) => {
         <hr />
       </div>
       <div>
-        <h2>What is your name?</h2>
+        <p><strong>Create a free account:</strong></p>
 
         <form>
           <label for="new-user-name" onsubmit={createNewUser}>
-            <input id="new-user-name" name="new-user-name" />
+            <input id="new-user-name" name="new-user-name" placeholder="What is your name?" />
             <p><button onclick={createNewUser}>Create User</button></p>
           </label>
         </form>
