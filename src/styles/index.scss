@@ -103,3 +103,34 @@ a {
     max-width: 49%;
   }
 }
+
+.notification {
+  position: fixed;
+  bottom: 60px;
+  left: 0;
+  width: 100%;
+  height: auto;
+  background: red;
+  color: #fff;
+  padding: 10px;
+  
+  transition: transform .3s ease-out;
+
+  transform: translateY(100%);
+
+  &--show {
+    transform: translateY(0);
+  }
+  &.warning {
+    background: #ff0;
+    color: #111;
+  }
+  &.error {
+    background: #f00;
+    color: #fff;
+  }
+  &.success {
+    background: #080;
+    color: #fff;
+  }
+}

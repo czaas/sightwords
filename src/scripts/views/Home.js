@@ -16,6 +16,11 @@ export const Home = (state, actions, data, emit) => {
       actions.createNewUser(newName);
 
       newNameElement.value = '';
+    } else {
+      actions.displayNotification({ 
+        message: 'Please enter a name',
+        type: 'warning',
+      });
     }
   }
 
