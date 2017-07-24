@@ -61,16 +61,16 @@ export const ChooseListType = (state, actions, data, emit) => {
 
       <p>View all Sight Words</p>
 
-      <button className="button button-outline">Words 1 - 100</button>
-      <button className="button button-outline">Words 101 - 200</button>
-      <button className="button button-outline">Words 201 - 300</button>
-      <button className="button button-outline">Words 301 - 400</button>
-      <button className="button button-outline">Words 401 - 500</button>
-      <button className="button button-outline">Words 501 - 600</button>
-      <button className="button button-outline">Words 601 - 700</button>
-      <button className="button button-outline">Words 701 - 800</button>
-      <button className="button button-outline">Words 801 - 900</button>
-      <button className="button button-outline">Words 901 - 1000</button>
+      <button onclick={() => actions.router.go('/list/group/1-100')} className="button button-outline">Words 1 - 100</button>
+      <button onclick={() => actions.router.go('/list/group/101-200')} className="button button-outline">Words 101 - 200</button>
+      <button onclick={() => actions.router.go('/list/group/201-300')} className="button button-outline">Words 201 - 300</button>
+      <button onclick={() => actions.router.go('/list/group/301-400')} className="button button-outline">Words 301 - 400</button>
+      <button onclick={() => actions.router.go('/list/group/401-500')} className="button button-outline">Words 401 - 500</button>
+      <button onclick={() => actions.router.go('/list/group/501-600')} className="button button-outline">Words 501 - 600</button>
+      <button onclick={() => actions.router.go('/list/group/601-700')} className="button button-outline">Words 601 - 700</button>
+      <button onclick={() => actions.router.go('/list/group/701-800')} className="button button-outline">Words 701 - 800</button>
+      <button onclick={() => actions.router.go('/list/group/801-900')} className="button button-outline">Words 801 - 900</button>
+      <button onclick={() => actions.router.go('/list/group/901-1000')} className="button button-outline">Words 901 - 1000</button>
     </ViewContainer>
   );
 };
