@@ -2,24 +2,6 @@ import { h } from 'hyperapp';
 import { ViewContainer } from './_ViewContainer.js';
 
 export const ChooseListType = (state, actions, data, emit) => {
-  function hasPracticeWords() {
-    let hasPracticeWords = false;
-
-    if (state.currentUser.list) {
-      for (let i = 0; i < state.currentUser.list.length; i++) {
-        if (state.currentUser.list[i].practice === true) {
-          hasPracticeWords = true;
-        }
-
-        if (hasPracticeWords === true) {
-          i = state.currentUser.list.length;
-        }
-      }
-    }
-
-    return hasPracticeWords;
-  }
-
   var mainListCount = state.currentUser.list.filter((word) => word.complete).length;
   var practiceListCount = state.currentUser.list.filter((word) => word.practice).length;
 
@@ -46,7 +28,7 @@ export const ChooseListType = (state, actions, data, emit) => {
       <blockquote>
         <p><em>You have {practiceListCount} word{practiceListCount === 1 ? '' : 's'} on your practice list.</em></p>
       </blockquote>
-      <button className={(hasPracticeWords()) ? '' : 'disabled'} onclick={() => {
+      <button className={(practiceListCount >= 1) ? '' : 'disabled'} onclick={() => {
         actions.updateList('practice');
         actions.setCurrentNextAndPrevWord();
         actions.router.go(`/list/practice`);
