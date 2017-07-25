@@ -25,7 +25,7 @@ const Nav = ({ state, actions }) => {
 
 export const ViewContainer = ({state, actions, className}, data) => {
   return (
-    <main class={className}>
+    <main class={`container ${className}`}>
       <div className={`notification ${state.notification.show ? 'notification--show' : ''} ${state.notification.type}`} onclick={actions.earlyHideNotification}>
         {state.notification.message}
       </div>

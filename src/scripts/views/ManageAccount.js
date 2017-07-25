@@ -48,6 +48,8 @@ export const ManageAccount = (state, actions, children) => {
 
       <hr />
 
+      <p><strong>There are no undos.</strong></p>
+
       <p><a onclick={() => {
         actions.resetList({ listType: 'main' });
         actions.displayNotification({

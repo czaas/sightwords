@@ -30,6 +30,18 @@ export const Home = (state, actions, data, emit) => {
 
       <p>Sight Words app for memorizing common words to be able to read on sight one word at a time. Practice and save your childrens progress as your they learn their sight words.</p>
 
+      <div className="row">
+        <div className="column">
+          <p>Learn and practice <strong>1000 sight words</strong>!</p>
+        </div>
+        <div className={`column ${state.speech.use ? '' : 'hide'}`}>
+          <p>Use screen reader to read words back to you!</p>
+        </div>
+        <div className="column">
+          <p>Share device with multiple user accounts.</p>
+        </div>
+      </div>
+
       <hr />
 
       <div class={showSelectUser}>

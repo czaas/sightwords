@@ -7,36 +7,41 @@ export const ChooseListType = (state, actions, data, emit) => {
 
   return (
     <ViewContainer state={state} actions={actions} className="choose-list">
-      <h2>Choose List Type</h2>
+      <h3>Choose List Type</h3>
 
-      <p>Learn Your Sight Words</p>
+      <div className="row">
+        <div className="column">
+          <p><strong>Learn Your Sight Words</strong></p>
 
-      <blockquote>
-        <p><em>You have completed</em> {mainListCount} of {state.currentUser.list.length} words.</p>
-      </blockquote>
+          <blockquote>
+            <p><em>You have completed</em> {mainListCount} of {state.currentUser.list.length} words.</p>
+          </blockquote>
 
-      <button onclick={() => {
-        actions.updateList('all');
-        actions.setCurrentNextAndPrevWord();
-        actions.router.go(`/list/all`);
-      }}>Start</button>
-      
+          <button onclick={() => {
+            actions.updateList('all');
+            actions.setCurrentNextAndPrevWord();
+            actions.router.go(`/list/all`);
+          }}>Start</button>
+
+        </div>
+        <div className="column">
+
+          <p><strong>Practice Time!</strong></p>
+
+          <blockquote>
+            <p><em>You have {practiceListCount} word{practiceListCount === 1 ? '' : 's'} on your practice list.</em></p>
+          </blockquote>
+          <button className={(practiceListCount >= 1) ? '' : 'disabled'} onclick={() => {
+            actions.updateList('practice');
+            actions.setCurrentNextAndPrevWord();
+            actions.router.go(`/list/practice`);
+          }}>Practice</button>
+        </div>
+      </div>
+
       <hr />
 
-      <p>Practice Time!</p>
-
-      <blockquote>
-        <p><em>You have {practiceListCount} word{practiceListCount === 1 ? '' : 's'} on your practice list.</em></p>
-      </blockquote>
-      <button className={(practiceListCount >= 1) ? '' : 'disabled'} onclick={() => {
-        actions.updateList('practice');
-        actions.setCurrentNextAndPrevWord();
-        actions.router.go(`/list/practice`);
-      }}>Practice</button>
-
-      <hr />
-
-      <p>View all Sight Words</p>
+      <p><strong>View all Sight Words</strong></p>
 
       <button onclick={() => actions.router.go('/list/group/1-100')} className="button button-outline">Words 1 - 100</button>
       <button onclick={() => actions.router.go('/list/group/101-200')} className="button button-outline">Words 101 - 200</button>
