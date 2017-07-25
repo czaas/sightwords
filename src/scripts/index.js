@@ -21,8 +21,6 @@ import { ManageAccount } from './views/ManageAccount.js';
 
 import ManageAccountObject from './views/ManageAccount.js';
 
-
-
 app({
   mixins: [Router],
   root: document.getElementById('mount'),
@@ -32,7 +30,6 @@ app({
     currentUser: {},
     currentListType: 'all', // all || practice
     currentWord: {},
-    showCongratsScreen: false,
 
     previousWord: {},
     nextWord: {},
@@ -41,9 +38,34 @@ app({
       message: '',
       type: '',
     },
+    
+    speech: {
+      useSpeech: false,
+      voice: 'default',
+    },
   },
 
   actions: {
+    updateSpeech: (state, actions, useSpeech) => {
+      state.speech.use = useSpeech;
+
+      return state;
+    },
+    setVoice: (state, actions, synthVoice) => {
+      state.speech.voice = synthVoice;
+
+      return state;
+    },
+    readWord: (state, actions, word) => {
+      var synth = window.speechSynthesis;
+      if (!synth.speaking) {
+        var readThis = new SpeechSynthesisUtterance(word);
+
+        synth.voice = state.speech.voice;
+        synth.speak(readThis);
+      }
+    },
+
     // User actions
     updateCurrentUser: (state, actions, data, emit) => {
       state.currentUser = data;
@@ -298,7 +320,35 @@ app({
     loaded: (state, actions, data, emit) => {
       emit('checkAndFetchListIfNeeded');
       emit('getAllUsers');
+
+      window.speechSynthesis.onvoiceschanged = function() {
+        emit('loadSpeech');
+      };
     },
+
+    /**
+    reads back words
+    */
+    loadSpeech: (state, actions) => {
+      if ('speechSynthesis' in window) {
+        var synth = speechSynthesis;
+        var defaultVoice;
+        var voices = synth.getVoices();
+
+        for(var i = 0; i < voices.length; i++) {
+          defaultVoice = voices[i];
+
+          if (i === 0) {
+            i = voices.length;
+          }
+        }
+        actions.setVoice(defaultVoice);
+        actions.updateSpeech(true);
+      } else {
+        actions.updateSpeech(false);
+      }
+    },
+
     checkAndFetchListIfNeeded: (state, actions) => {
       let listRef = localStorage.getItem('sightwords--list');
 

@@ -41,13 +41,14 @@ export const ManageAccount = (state, actions, children) => {
 
       <form onsubmit={saveName}>
         <label>
-          Hello,&nbsp;
           <input type="text" id="name" required value={state.currentUser.name || ''} />
         </label>
         <p><button>Save</button></p>
       </form>
 
       <hr />
+
+      <p><strong>There are no undos.</strong></p>
 
       <p><a onclick={() => {
         actions.resetList({ listType: 'main' });
