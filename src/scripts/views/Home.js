@@ -27,8 +27,8 @@ export const Home = (state, actions, data, emit) => {
   return (
     <ViewContainer state={state} actions={actions} className='home'>
       <h1>Sight Words</h1>
-
-      <p>Sight Words app for memorizing common words to be able to read on sight one word at a time. Practice and save your childrens progress as your they learn their sight words.</p>
+      
+      <p>A list of words to see and memorize on sight. This application will help you track your words, add to a practice list, and read words back to you.</p>
 
       <hr />
 
