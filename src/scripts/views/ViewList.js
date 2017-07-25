@@ -1,5 +1,6 @@
 import { h } from 'hyperapp';
 import { ViewContainer } from './_ViewContainer.js';
+import { SoundIcon } from './../components/icons.js';
 
 export const ViewList = (state, actions, data, emit) => {
   let currentWord = state.currentWord;
@@ -34,6 +35,8 @@ export const ViewList = (state, actions, data, emit) => {
 
         <p className={(state.currentListType === 'practice') ? 'hide' : ''}>All words list<br /> {state.currentWord.sequence} / {state.currentUser.list.length}</p>
         <p className={(state.currentListType === 'all') ? 'hide' : ''}>Your practice<br /> {state.currentUser.list.filter((word) => word.practice).indexOf(state.currentWord) + 1} / {state.currentUser.list.filter((word) => word.practice).length}</p>
+
+        <p className={state.speech.use ? '' : 'hide'}  onclick={() => actions.readWord(currentWord.word)}><SoundIcon /></p>
 
         <form onchange={formChange}>
           <label for="complete">
