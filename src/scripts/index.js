@@ -313,6 +313,8 @@ app({
         ) {
         actions.setCurrentNextAndPrevWord(routerParams.params.word);
       }
+
+      window.scrollTo(0, 0);
     },
     update: (state, actions) => {
       //console.log(state);

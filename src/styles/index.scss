@@ -21,7 +21,7 @@ body {
 }
 
 .hide {
-  display: none;
+  display: none !important;
 }
 
 .disabled {
@@ -134,5 +134,31 @@ button,
   &.success {
     background: #080;
     color: #fff;
+  }
+}
+
+.center {
+  text-align: center;
+}
+
+.inversed-bg {
+  background: $color-primary;
+  padding: 25px;
+  
+  &,
+  a {
+    color: #fff;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+  
+  input[type="text"] {
+    background: #fff;
+  }
+  button {
+    background: #fff;
+    color: $color-primary;
   }
 }
