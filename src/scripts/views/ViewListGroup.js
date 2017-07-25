@@ -46,7 +46,7 @@ export const ViewListGroup = (state, actions) => {
     <h1>Words by group</h1>
     <table>
       <tr>
-        <th>#</th><th>Word</th><th>Complete</th><th>Practice</th>
+        <th>#</th><th>Word</th><td>&nbsp;</td><th>Complete</th><th>Practice</th>
       </tr>
       {htmlListOfWords}
     </table>

@@ -60,7 +60,7 @@ app({
       var synth = window.speechSynthesis;
       if (!synth.speaking) {
         var readThis = new SpeechSynthesisUtterance(word);
-        
+
         synth.voice = state.speech.voice;
         synth.speak(readThis);
       }
@@ -331,14 +331,11 @@ app({
     */
     loadSpeech: (state, actions) => {
       if ('speechSynthesis' in window) {
-        console.log('here');
         var synth = speechSynthesis;
         var defaultVoice;
-        // console.log(synth.getVoices()[0]);
         var voices = synth.getVoices();
 
         for(var i = 0; i < voices.length; i++) {
-          console.log(voices[i]);
           defaultVoice = voices[i];
 
           if (i === 0) {
