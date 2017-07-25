@@ -23,9 +23,12 @@ export const ViewList = (state, actions, data, emit) => {
 
     currentWord.complete = complete;
     currentWord.practice = practice;
-    
+
     actions.updateCurrentWord(currentWord);
-    document.getElementById('next-word').click();
+    
+    if (e.srcElement.attributes.id.value === 'complete') {
+      document.getElementById('next-word').click();
+    }
   }
 
   return (
@@ -39,7 +42,7 @@ export const ViewList = (state, actions, data, emit) => {
         <p className={state.speech.use ? '' : 'hide'}  onclick={() => actions.readWord(currentWord.word)}><SoundIcon /></p>
 
         <form onchange={formChange}>
-          <label for="complete">
+          <label for="complete" class={state.currentListType === 'practice' ? 'hide' : ''}>
             Complete
             <input type="checkbox" id="complete" name="complete" value="true" checked={state.currentWord.complete} />
           </label>
