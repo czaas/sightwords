@@ -2,10 +2,6 @@ import { h } from 'hyperapp';
 import { ViewContainer } from './_ViewContainer.js';
 
 export const ChooseListType = (state, actions, data, emit) => {
-  if (!state.currentUser.list) {
-    actions.go('/');
-  }
-  
   var mainListCount = state.currentUser.list.filter((word) => word.complete).length;
   var practiceListCount = state.currentUser.list.filter((word) => word.practice).length;
 
