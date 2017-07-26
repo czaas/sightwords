@@ -1,5 +1,16 @@
+$color-initial: #fff;
+$color-primary: #4d008a;
+$color-secondary: #222;
+$color-tertiary: #f4f5f6;
+$color-quaternary: #c4c4c4;
+$color-quinary: #e1e1e1;
+
+@import './../../node_modules/milligram/src/milligram';
+
+
 body {
   margin: 0;
+  padding: 25px 0 60px;
 }
 
 * {
@@ -9,3 +20,145 @@ body {
   }
 }
 
+.hide {
+  display: none !important;
+}
+
+.disabled {
+  opacity: .5;
+  pointer-events: none;
+}
+
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 60px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  background: #222;
+  min-width: 100%;
+
+  & > a {
+    text-align: center;
+    padding: 5px;
+    color: #fff;
+    flex: 0 0 31%;
+    font-size: 12px;
+  }
+}
+
+main {
+  padding-bottom: 44px;
+}
+
+input {
+  border: 1px solid #000;
+}
+
+a {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+/**
+  Views
+*/
+input[type="text"],
+button, 
+.button {
+  display: block;
+  width: 100%;
+  text-align: center;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.view-list {
+  text-align: center;
+
+  h1 {
+    margin: 3rem 0;
+  }
+  label, input {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+/** 
+  Comopnents 
+*/
+.prev-next-buttons {
+  display: flex;
+  justify-content: space-between;
+
+  & > a {
+    flex: 0 0 49%;
+    width: 100%;
+    max-width: 49%;
+  }
+}
+
+.notification {
+  position: fixed;
+  bottom: 60px;
+  left: 0;
+  width: 100%;
+  height: auto;
+  background: red;
+  color: #fff;
+  padding: 10px;
+  
+  transition: transform .3s ease-out;
+
+  transform: translateY(100%);
+
+  &--show {
+    transform: translateY(0);
+  }
+  &.warning {
+    background: #ff0;
+    color: #111;
+  }
+  &.error {
+    background: #f00;
+    color: #fff;
+  }
+  &.success {
+    background: #080;
+    color: #fff;
+  }
+}
+
+.center {
+  text-align: center;
+}
+
+.inversed-bg {
+  background: $color-primary;
+  padding: 25px;
+  
+  &,
+  a {
+    color: #fff;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+  
+  input[type="text"] {
+    background: #fff;
+  }
+  button {
+    background: #fff;
+    color: $color-primary;
+  }
+}
