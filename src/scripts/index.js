@@ -17,6 +17,7 @@ import { ChooseListType } from './views/ChooseListType.js';
 import { ViewList } from './views/ViewList.js';
 import { ViewListGroup } from './views/ViewListGroup.js';
 import { ManageAccount } from './views/ManageAccount.js';
+import { NotFound } from './views/NotFound.js';
 
 
 import ManageAccountObject from './views/ManageAccount.js';
@@ -442,5 +443,6 @@ app({
     ['/list/practice/:word', ViewList],
     ['/list/group/:range', ViewListGroup],
     ['/manage-account', ManageAccount],
+    ['*', NotFound],
   ],
 });
